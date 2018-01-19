@@ -12,6 +12,9 @@ namespace MonoImage
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D img;
+        Vector2 pos;
+        int speed = 5;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,7 +30,7 @@ namespace MonoImage
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            pos = new Vector2(100, 100);
             base.Initialize();
         }
 
@@ -41,6 +44,10 @@ namespace MonoImage
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            img = this.Content.Load<Texture2D>("slimePurple");
+            
+
         }
 
         /// <summary>
@@ -63,7 +70,12 @@ namespace MonoImage
                 Exit();
 
             // TODO: Add your update logic here
+            if (pos.X < 0 || pos.X + img.Width > GraphicsDevice.Viewport.Width)
+            {
+                speed = -speed;
+            }
 
+            pos.X += speed;
             base.Update(gameTime);
         }
 
@@ -73,11 +85,22 @@ namespace MonoImage
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            SpriteEffects effects = SpriteEffects.None;
+            if (speed > 0)
+            {
+                effects = SpriteEffects.FlipHorizontally;
+            }
+            spriteBatch.Draw(img, pos, null, Color.White, 0, Vector2.Zero,1.0f, effects, 0);
+           
+            spriteBatch.End();
 
             base.Draw(gameTime);
+
+
         }
     }
 }
